@@ -46,6 +46,128 @@
     </div>
 </template>
 
+<script>
+    export default {
+        props: ['dataRoomNumber'],
+        mounted(){
+            axios.post('/check', {
+                key: this.roomId,
+            })
+            .then((response) => {
+                try{
+                    if(response.data == 0){
+                        this.key_block = false; 
+                    }else{
+                        this.key_block = true;
+                        this.key = this.roomId;
+                    }
+                }catch(e){
+                    this.err_status_q = true;
+                }
+            })
+            .catch((error) => {
+                this.err_status_q = true;
+            });
+
+
+        },
+        data(){
+            return {
+                roomId: this.dataRoomNumber,
+                name: "",
+                surname: "",
+                key: "",
+                rating: null,
+                key_block: false,
+                bad_key: false,
+                lang: undefined,
+                err_status: false,   // ошибка клиент
+                err_status_q: false, // ошибка сервер (любая)
+                err_timer: undefined,
+                track_status: false,
+                lang_list: [
+                    'en',
+                    'ru'
+                ],
+                browser_lang: ((window.navigator ? (window.navigator.language || window.navigator.systemLanguage || window.navigator.userLanguage) : "ru").substr(0, 2).toLowerCase()),
+                ui_international:{
+                    en: {
+                        name_placeholder: "Your name",
+                        surname_placeholder: "Your surname",
+                        name_placeholder_val: "Sergei",
+                        surname_placeholder_val: "Plutogarenko"
+                    },
+                    ru: {
+                        name_placeholder: "Ваше имя",
+                        surname_placeholder: "Ваша фамилия",
+                        name_placeholder_val: "Сергей",
+                        surname_placeholder_val: "Плутогаренко"
+                    }
+
+                }
+            }
+        },
+        methods: {
+            inputEv(){
+                try{
+                    if(this.track_status != this.track_name_surname){
+                        this.err_status = false;
+                    }
+                    clearTimeout(this.err_timer);
+                    this.err_timer = setTimeout(() => {
+                        this.err_status = true;
+                        this.track_status = this.track_name_surname;
+                    }, 1000);
+                }catch(e){
+                    this.err_status_q = true;
+                }
+            },
+            getUI(word){
+                try{
+                    if(this.lang != undefined){
+                        return this.ui_international[this.lang][word];
+                    }else{
+                        // если пользователь еще не выбрал язык, и язык его барузера не поддерживается сценарием
+                        // мы используем английский язык
+                        if(this.lang_list.indexOf(this.browser_lang) != -1){
+                            return this.ui_international[this.browser_lang][word];
+                        }else{
+                            return this.ui_international["en"][word];
+                        }
+                    }
+                }catch(e){
+                    this.err_status_q = true;
+                }
+            },
+            
+            coonect2game(){
+                axios.post('/teams/connect', {
+                    roomId: this.roomId,
+                    name: this.name,
+                    surname: this.surname,
+                    key: this.key,
+                    lang: this.lang,
+                })
+                .then((response) => {
+                    try{
+                        if(response.data == 1){
+                            window.location.href="https://localhost/rules/" + this.lang + "/" + this.key;
+                        }else{
+                            this.bad_key = true;
+                        }
+                    }catch(e){
+                        this.err_status_q = true;
+                    }
+                })
+                .catch((error) => {
+                    this.err_status_q = true;
+                });
+            }
+        } 
+    }
+</script>
+
+
 <style>
 
 .login-component-page{

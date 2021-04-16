@@ -14,6 +14,7 @@
 Route::get('/', 'GameMechanicsController@login_screen');
 Route::get('/{id}', 'GameMechanicsController@login_screen')->name('login_route');
 Route::post('check', 'GameMechanicsController@check_key');
+Route::post('teams/connect', 'GameMechanicsController@newTeamConnect');
 
 Auth::routes();
 

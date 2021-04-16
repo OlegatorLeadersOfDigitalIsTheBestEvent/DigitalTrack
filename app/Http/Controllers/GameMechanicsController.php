@@ -50,4 +50,23 @@ class GameMechanicsController extends Controller{
             return 0;
         }
     }
+    
+    public function newTeamConnect(Request $request){
+        if(Teams::where('key', '=', $request->key)->where('used', false)->count()){
+            
+            $collection_for_check = Teams::where('key', $request->key)->first();
+            
+            // логинем человека в игру
+            Teams::where('key', $request->key)->update([
+                'ingame'  => true, 
+                'name'    => $request->name, 
+                'surname' => $request->surname, 
+                'lang'    => $request->lang,
+            ]);
+            
+            return 1;
+        }else{
+            return 0;
+        }        
+    }
 }
