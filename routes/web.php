@@ -13,6 +13,7 @@
 
 Route::get('/', 'GameMechanicsController@login_screen');
 Route::get('/{id}', 'GameMechanicsController@login_screen')->name('login_route');
+Route::post('check', 'GameMechanicsController@check_key');
 
 Auth::routes();
 
