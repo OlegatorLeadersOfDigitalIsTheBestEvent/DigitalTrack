@@ -7,6 +7,7 @@
 
 <script>
 export default {
+    props: ['dataRoomNumber'],
     data() {
         return {
            
@@ -23,7 +24,28 @@ export default {
                 step_activity: false,
             },
             lang: ru,
-          
+            dynamic:{
+                1:{
+                    save_result: 0,
+                    best_result: 0,
+                },
+                2:{
+                    save_result: 0,
+                    best_result: 0,
+                },
+                3:{
+                    save_result: 0,
+                    best_result: 0,
+                },
+                4:{
+                    save_result: 0,
+                    best_result: 0,
+                },
+                5:{
+                    save_result: 0,
+                    best_result: 0,
+                },
+            },
             new_cards_for_step: [],
             news: [],
             cards: [],
