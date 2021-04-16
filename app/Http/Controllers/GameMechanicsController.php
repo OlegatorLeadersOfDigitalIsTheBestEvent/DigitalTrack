@@ -18,5 +18,6 @@ use Mail;
 use Validator;
 
 class GameMechanicsController extends Controller{
+    public function login_screen($id = null){ return view('welcome', ['id' => $id]); }
 
 }

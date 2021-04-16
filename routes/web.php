@@ -11,10 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'GameMechanicsController@login_screen');
+Route::get('/{id}', 'GameMechanicsController@login_screen')->name('login_route');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
+
