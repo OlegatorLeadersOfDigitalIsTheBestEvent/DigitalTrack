@@ -5,7 +5,7 @@
                 <div class="col-md"></div>
                 <div class="col-md-8 map" 
                     :style="{
-                        'background': 'url(https://localhost/schemes/' + lang + '/scheme.png) no-repeat',
+                        'background': 'url(https://localhost/schemes/scheme.png) no-repeat',
                     }"
                 ></div>
                 <div class="col-md-3">
@@ -346,16 +346,23 @@ export default {
             });
         },
         
-     makeRecalculating(){
-        axios.post('https://localhost/day_result', {
-            team_id: this.user.team_id,
-            day: this.user.day,
-        })
-        .then((response) => {
-            this.user.old_score = this.user.score;
-            this.user.score = response.data;
-        });
-    },
+         cardById(id) {
+            return 'https://localhost/cards/full/' + id + '.svg'
+        },
+        smallCardById(id) {
+            return 'https://localhost/cards/small/' + id + '.svg'
+        },
+        
+         makeRecalculating(){
+            axios.post('https://localhost/day_result', {
+                team_id: this.user.team_id,
+                day: this.user.day,
+            })
+            .then((response) => {
+                this.user.old_score = this.user.score;
+                this.user.score = response.data;
+            });
+        },
             
         }
     }

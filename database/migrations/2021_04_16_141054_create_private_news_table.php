@@ -22,9 +22,6 @@ class CreatePrivateNewsTable extends Migration
             $table->text('news_ru');
             $table->text('description_ru')->nullable();
 
-            $table->text('news_en');
-            $table->text('description_en')->nullable();
-
             // видно лишь для некоторых видов карт, если - 0 видно для всех, если не 0, то для определенной карты
             $table->integer('visible')->default(0);
 

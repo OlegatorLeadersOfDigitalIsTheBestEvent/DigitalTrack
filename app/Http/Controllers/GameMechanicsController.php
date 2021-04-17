@@ -105,6 +105,18 @@ class GameMechanicsController extends Controller{
         }
     }
     
+    private function listOfValidCommans(){ 
+        return Teams::select('team_number', 'connection_status', 'lang')
+        ->get()->toJson();
+    }
+    
+    private function cardsList($id){
+        return Cards::whereIn('cards.id', $id)
+        ->leftJoin('card_types', 'card_types.id', '=', 'cards.type')
+        ->select('card_types.*', 'cards.*')->addSelect(DB::raw("false as active"))->get()
+        ->toJson();
+    }
+    
     public function newTeamConnect(Request $request){
         if(Teams::where('key', '=', $request->key)->where('used', false)->count()){
             
@@ -201,6 +213,43 @@ class GameMechanicsController extends Controller{
         foreach ($all_issues as $issue_key => $issue) {
             
             if($issue['solution'] != null && $issue['day'] == $day){
+                // массив решений проходимся по каждому элементу и изем его в картах дня
+                $arr_solution = explode(',', $issue['solution']);
+                
+                foreach($arr_solution as $solution_key => $solution_item){
+                    if(in_array($solution_item, $all_choose_cards_arr)){
+                        // правильное решение есть
+                        if($issue['outcomes_good'] != null){ 
+                            $arr_outcomes_good = explode(',', $issue['outcomes_good']);
+                            foreach ($arr_outcomes_good as $insert_value) {
+                                $newCards[] = intval($insert_value); 
+                            }
+                        }
+                        $step_save_cashloss += $issue['cash_loss'];
+                    }else{
+                        // правильного решения нет
+                        
+                        if($issue['outcomes_bad'] != null){ 
+                            $arr_outcomes_bad  = explode(',', $issue['outcomes_bad']);
+                            foreach ($arr_outcomes_bad as $insert_value) {
+                                $newCards[] = intval($insert_value); 
+                            }
+                        }
+                        
+                        // вычитаем деньги из счета команды
+                        $value -= $issue['cash_loss'];
+                    }
+                    $step_max_cashloss += $issue['cash_loss'];
+                }
+            }
+            
+
+            // ------------------ СТАРАЯ ВЕРСИЯ ----------------- //
+            /*
+                Максимально можно привязать к проблеме три правильные карты 
+            */
+            /*
+            if($issue['solution'] != null && $issue['day'] == $day){
 
                 $arr_solution = explode(',', $issue['solution']);
                 
@@ -245,7 +294,8 @@ class GameMechanicsController extends Controller{
                 }
                 $step_max_cashloss += $issue['cash_loss'];
                
-            }
+            } */
+            // ------------------ СТАРАЯ ВЕРСИЯ ----------------- //
         }
 
         // записываем все новые карты в БД
@@ -268,5 +318,19 @@ class GameMechanicsController extends Controller{
         // обновляем счет
         Teams::where('key', $id)->update(['score' => $newScore, 'step'.$day.'_user_result' => $step_save_cashloss, 'step'.$day.'_max_result' => $step_max_cashloss]);
         return $newScore;
+    }
+    
+    public function game_rules($lang, $key){ 
+        return view('rules', ['key' => $key, 'lang' => $lang]);
+    }
+
+    // вьюха с результатами
+    public function game_results($lang, $key){ 
+          
+        // if(!Teams::where('key', '=', $key)->where('used', false)->count()){ abort(404); };
+
+        // деактивируем игру
+        Teams::where('key', $key)->update(['ingame' => false, 'used' => true, 'used_time' => \Carbon\Carbon::now()]);
+        return view('result', ['key' => $key, 'lang' => $lang]);
     }
 }
