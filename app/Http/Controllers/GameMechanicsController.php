@@ -125,12 +125,148 @@ class GameMechanicsController extends Controller{
     }
     
     // получение публичных новостей
-    // private function getNewsByDay($day){
-    //     return PublicNews::where('day', $day)->select('news', 'type', 'description')->first()->toJson();
-    // }
+    private function getNewsByDay($day){
+        return PublicNews::where('day', $day)->select('news', 'type', 'description')->first()->toJson();
+    }
 
     // private function getPrivateNewsByDay($day){
     //     return PrivateNews::where('day', $day)->get()->toJson();
     // }
     
+    public function newcards(Request $request){
+        // идентификатор команды в переборе
+        $id  = $request->team_id; 
+        $day = $request->day;
+
+        // получаем карты выдачи на ход
+        $day_cards = StepCards::where('day', $day)->get();
+    
+        // проверяем есть есть карты  для  выдачи на ход, 
+        // то мы их пушим в активные карты
+        if($day_cards->count() > 0){
+
+            // начальные карты
+            $db_cards_list = [];
+            foreach ($day_cards as $item) {
+                $newItem = array(
+                    'team_id' => $id,
+                    // $item->day
+                    'day'     => $item->day, // BEFORE WAS $item->id
+                    'card'    => $item->card,
+                );
+                $db_cards_list[] = $newItem;
+            }
+            
+            ActiveCards::insert($db_cards_list);
+        }
+
+        $cards = ActiveCards::where('team_id', $id)->get()->toArray();
+        $card_for_sending = [];
+        foreach ($cards as $key => $card) { 
+            $card_for_sending[] = $card['card'];
+        }
+        
+        return $this->cardsList($card_for_sending);
+    }
+    
+    public function day_result(Request $request){
+        // сегодняшний день
+        $day = $request->day;
+        $id  = $request->team_id;
+
+        // максимальная сумма заработанных денег командой за ход
+        $value = 1200;
+        
+        $step_save_cashloss = 0;
+        $step_max_cashloss = 0;
+
+        $team = Teams::where('key', $id)->select('score')->first()->toArray();
+        $old_score = $team['score'];
+
+        // карты которые команда получит на следующий ход 
+        $newCards =  [];
+        // получаем все выбранные командой карты
+        $all_choose_cards = SelectedCards::where('team_id', $id)->get()->toArray();
+        $all_choose_cards_arr = [];
+        
+        // провращяем коллеккцию в массив
+        foreach($all_choose_cards as $all_choose_cards_key => $all_choose_cards_item){
+            $all_choose_cards_arr[] = $all_choose_cards_item['card'];
+        }
+
+        // получаем все проблемы
+        $all_issues = PrivateNews::all()->toArray();
+
+        // проходимся  по каждой проблеме
+        foreach ($all_issues as $issue_key => $issue) {
+            
+            if($issue['solution'] != null && $issue['day'] == $day){
+
+                $arr_solution = explode(',', $issue['solution']);
+                
+                // флаг правильности
+                $result = false;
+
+                // день выбора
+                $day_of_choose = null;
+
+                // работоспособность конструкции под вопросом
+                // хз что проичходит когда карт несколько а интсрукция сбросилась
+                foreach ($all_choose_cards as $card_key => $card_item) {
+                    if(in_array($card_item['card'], $arr_solution)){
+                        $result = true;
+                        $day_of_choose = $card_item['day'];
+                        break;
+                    }
+                }
+
+                if($result){
+                    // если есть карты для выдачи мы их выдем
+                    if($issue['outcomes_good'] != null){ 
+                        $arr_outcomes_good = explode(',', $issue['outcomes_good']);
+                        foreach ($arr_outcomes_good as $insert_value) {
+                            $newCards[] = intval($insert_value); 
+                        }
+                    }
+                    $step_save_cashloss += $issue['cash_loss'];
+                }else{
+                    // карта НЕ выбрана
+                    // если есть карты для выдачи мы их выдем
+                    if($issue['outcomes_bad'] != null){ 
+                        $arr_outcomes_bad  = explode(',', $issue['outcomes_bad']);
+                        foreach ($arr_outcomes_bad as $insert_value) {
+                            $newCards[] = intval($insert_value); 
+                        }
+                    }
+                    
+                    // вычитаем деньги из счета команды
+                    $value -= $issue['cash_loss'];
+                    
+                }
+                $step_max_cashloss += $issue['cash_loss'];
+               
+            }
+        }
+
+        // записываем все новые карты в БД
+        // id == team_id == key
+        $new_cards = $this->card_check($newCards, $id);
+        $db_cards_list = [];
+        
+        foreach ($newCards as $item) {
+            $newItem = array(
+                'team_id' => $id,
+                // before was ++$day 
+                'day'     => ($day+1),
+                'card'    => $item,
+            );
+            $db_cards_list[] = $newItem;
+        }
+
+        ActiveCards::insert($db_cards_list);
+        $newScore = $old_score + $value;
+        // обновляем счет
+        Teams::where('key', $id)->update(['score' => $newScore, 'step'.$day.'_user_result' => $step_save_cashloss, 'step'.$day.'_max_result' => $step_max_cashloss]);
+        return $newScore;
+    }
 }

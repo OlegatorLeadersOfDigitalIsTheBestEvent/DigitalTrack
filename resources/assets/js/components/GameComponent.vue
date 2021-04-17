@@ -101,6 +101,12 @@ export default {
         }
     },
     computed: {
+        status_window: function(){
+            return this.video.second > this.notify_stamps[this.user.day].start && this.video.second < this.notify_stamps[this.user.day].end;  
+        },
+        team_room: function() {
+            return "team" + this.user.team_id;
+        },
         history_render_images_list: function() {
             
             let render_list = [];
@@ -111,7 +117,7 @@ export default {
                 for (let i = 0; i < this.history.length; i++) {
                     let data_push = {
                         id: this.history[i],
-                        src: this.history[i],
+                         src: this.smallCardById(this.history[i]),
                     }
                     render_list.push(data_push);
                 }
@@ -129,7 +135,8 @@ export default {
                 for (let i = 0; i < max_count_of_cards; i++) {
                     let data_push = {
                         id: this.history[i],
-                        src: this.history[i],
+                        src: this.smallCardById(this.history[i]),
+
                     }
 
                     render_list.push(data_push);
@@ -140,7 +147,75 @@ export default {
         }
     },
     methods: {
-    
+        // обновление карт
+        cardsUpdate(){
+            axios.post('https://localhost/newcards', {
+                team_id: this.user.team_id,
+                day: this.user.day,
+                lang: this.lang,
+            })
+            .then((response) => {
+                // только новые карты
+                let new_cards = [];
+
+                // список старых карт
+                let old_cards_list = this.cards;
+                let new_cards_list = response.data;
+                
+                
+                // обновление списка активных карт
+                this.cards = response.data;
+                
+                // идем по новым картам 
+                new_cards_list.forEach((new_card, new_index) => {
+                    // если новой карты нет в списке старых мы ее добавляем в новые карты
+                    let status_availability = false;
+                    old_cards_list.forEach((old_card, old_index) => {
+                        if(old_card.id == new_card.id){
+                            status_availability = true;
+                        }
+                    });
+                    if(status_availability == false){ new_cards.push(new_card.id) }
+                });
+
+                this.new_cards_for_step = new_cards;
+
+                // добавляем новость о новых картах
+                this.news.push({
+                    type: 3,
+                    ['news_' + this.lang]: this.ui_lang[this.lang].newCardsNotyfy + ": " + new_cards.join(', '),
+                    ['description_' + this.lang]: null,
+                });
+               
+            });
+        },
+        newDay(){
+            // инкреминируем день
+            this.user.day++;
+            
+            //bpvtyztv экран
+            this.screen = 1;
+
+            // обновляем интерфейс
+            this.user.day_time = 100;
+            this.user.day_money = 100;
+            
+            if(this.user.day >= 1 && this.user.day <= 5){
+
+                // тем временем в фоне получаем новости публичные и приватные и карты
+                // публичные новости
+                this.getPublicNews();
+
+                // получаем приватные новости
+                this.getPrivateNews();
+
+                // получаем новые карты
+                this.cardsUpdate();
+                
+                // динамика cash loss   
+                this.getDynamic();
+            }
+        },
         makeAllCardsActive() {
             this.cards.forEach((card, index) => {
                 this.cards[index].active = true;
@@ -271,8 +346,17 @@ export default {
             });
         },
         
-        
-                
+     makeRecalculating(){
+        axios.post('https://localhost/day_result', {
+            team_id: this.user.team_id,
+            day: this.user.day,
+        })
+        .then((response) => {
+            this.user.old_score = this.user.score;
+            this.user.score = response.data;
+        });
+    },
+            
         }
     }
 }

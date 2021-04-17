@@ -20,6 +20,9 @@ Route::post('public_news_publication', 'GameMechanicsController@public_news_publ
 Route::post('private_news_publication', 'GameMechanicsController@private_news_publication');
 Route::post('dynamic', 'GameMechanicsController@dynamic');
 
+Route::post('day_result', 'GameMechanicsController@day_result');
+Route::post('newcards', 'GameMechanicsController@newcards');
+
 Auth::routes();
 
 
