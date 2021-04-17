@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="login-component-page" v-bind:style="{ backgroundImage: 'url(https://localhost/ui/bg_ru.jpg)' }">
+        <div class="login-component-page" v-bind:style="{ backgroundImage: 'url(https://localhost/ui/bg.png)' }">
             <div class="row login_screen">
                 <div class="col-md-4 offset-md-2" style="margin-top: 5%;">
                     <div class="card" style="border-radius: 15px;">
@@ -26,6 +26,25 @@
                                                 </p>
                                             </div>
                                         </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-12"><label>Выберите аватар</label></div>
+                                            <div class="col-md-3">
+                                                <img v-if="activeAvatar == 1" @click="setActiveAvatar(1)" class="active-ui-el"   src="https://localhost/avatars/1.png">
+                                                <img v-if="activeAvatar != 1" @click="setActiveAvatar(1)" class="active-ui-el unactive-ui-el" src="https://localhost/avatars/1.png">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <img v-if="activeAvatar == 2" @click="setActiveAvatar(2)" class="active-ui-el"   src="https://localhost/avatars/2.png">
+                                                <img v-if="activeAvatar != 2" @click="setActiveAvatar(2)" class="active-ui-el unactive-ui-el" src="https://localhost/avatars/2.png">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <img v-if="activeAvatar == 3" @click="setActiveAvatar(3)" class="active-ui-el"   src="https://localhost/avatars/3.png">
+                                                <img v-if="activeAvatar != 3" @click="setActiveAvatar(3)" class="active-ui-el unactive-ui-el" src="https://localhost/avatars/3.png">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <img v-if="activeAvatar == 4" @click="setActiveAvatar(4)" class="active-ui-el"   src="https://localhost/avatars/4.png">
+                                                <img v-if="activeAvatar != 4" @click="setActiveAvatar(4)" class="active-ui-el unactive-ui-el" src="https://localhost/avatars/4.png">
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-12 mt-4">
                                         <div class="custom-control custom-checkbox">
@@ -38,8 +57,8 @@
                                 <div class="form-group">
                                     <div class="col-md-12 col-md-offset-4">                                        
                                         <center>
-                                            <a v-if="!loginAccess" style="text-align: center;"                            class="unactive-ui-el"><img height="47" class="mt-2 mb-1" :src="'https://localhost/ui/login_ru.svg'" alt=""></a>
-                                            <a v-if="loginAccess"  style="text-align: center;" v-on:click="coonect2game"  class="active-ui-el">  <img height="47" class="mt-2 mb-1" :src="'https://localhost/ui/login_ru.svg'" alt=""></a>
+                                            <a v-if="!loginAccess" style="text-align: center;"                            class="unactive-ui-el"><img height="47" class="mt-2 mb-1" :src="'https://localhost/ui/login.svg'" alt=""></a>
+                                            <a v-if="loginAccess"  style="text-align: center;" v-on:click="coonect2game"  class="active-ui-el">  <img height="47" class="mt-2 mb-1" :src="'https://localhost/ui/login.svg'" alt=""></a>
                                         </center>
                                     </div>
                                 </div>
@@ -71,7 +90,7 @@
                                             1
                                         </td>
                                         <td class="text-center">
-                                            <i class="fas fa-crown" style="color: rgb(255 119 4);"></i> Сергей
+                                            <i class="fas fa-crown" style="color: rgb(0 118 254);"></i> Сергей
                                         </td>
                                         <td class="text-center">
                                            {{ rating[0]["score"] + 150 }}
@@ -117,6 +136,7 @@
         mounted(){
             axios.post('https://localhost/check', {
                 key: this.roomId,
+                _token: $('meta[name="csrf-token"]').attr('content')
             })
             .then((response) => {
                 
@@ -131,7 +151,7 @@
 
             axios.post('https://localhost/rating_list')
             .then((response) => {
-               this.rating = response.data;
+                this.rating = response.data;
             });
 
 
@@ -144,6 +164,7 @@
         },
         data(){
             return {
+                activeAvatar: 1,
                 roomId: this.dataRoomNumber,
                 name: "",
                 surname: "",
@@ -170,6 +191,9 @@
             }
         },
         methods: {
+            setActiveAvatar(id){
+                this.activeAvatar = id;
+            },
             inputEv(){
                
                 if(this.track_status != this.track_name_surname){
@@ -189,14 +213,16 @@
                     name: this.name,
                     surname: this.surname,
                     key: this.key,
+                    lang: this.lang,
+                    _token: $('meta[name="csrf-token"]').attr('content')
                 })
                 .then((response) => {
-                    
                     if(response.data == 1){
-                        window.location.href="https://localhost/rules/" + this.lang + "/" + this.key;
+                        window.location.href="https://localhost/rules/" + this.key;
                     }else{
                         this.bad_key = true;
                     }
+                
                 });
             }
         } 
