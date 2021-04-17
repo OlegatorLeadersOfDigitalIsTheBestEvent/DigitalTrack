@@ -16,6 +16,10 @@ Route::get('/{id}', 'GameMechanicsController@login_screen')->name('login_route')
 Route::post('check', 'GameMechanicsController@check_key');
 Route::post('teams/connect', 'GameMechanicsController@newTeamConnect');
 
+Route::post('public_news_publication', 'GameMechanicsController@public_news_publication');
+Route::post('private_news_publication', 'GameMechanicsController@private_news_publication');
+Route::post('dynamic', 'GameMechanicsController@dynamic');
+
 Auth::routes();
 
 

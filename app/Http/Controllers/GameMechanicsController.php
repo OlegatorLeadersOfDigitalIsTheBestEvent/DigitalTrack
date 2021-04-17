@@ -18,6 +18,60 @@ use Mail;
 use Validator;
 
 class GameMechanicsController extends Controller{
+    // информация о командах и обновление
+    public function dynamic(Request $request){
+        return Teams::where('key', '=', $request->key)->select(
+            'step1_user_result', 'step1_max_result',
+            'step2_user_result', 'step2_max_result',
+            'step3_user_result', 'step3_max_result',
+            'step4_user_result', 'step4_max_result',
+            'step5_user_result', 'step5_max_result'
+        )->first()->toJson();
+    }
+    
+    // обновление публичных новостей
+    public function public_news_publication(Request $request){
+        $day  = $request->day;
+        $lang = $request->lang;
+
+        //  получаем все приватные новости
+        $news = PrivateNews::where('day', $day)
+                ->where('type', 1)
+                ->select('news_'.$lang, 'type', 'description_'.$lang)
+                ->get()
+                ->toJson();
+        return $news;        
+    }
+    
+    
+    public function private_news_publication(Request $request){
+        $day  = $request->day;
+        $id   = $request->team_id;
+        $lang = $request->lang;
+
+        // сначала получаем все приватные новости
+        $whereIn = [0];
+        $all_cards = SelectedCards::where('team_id', $id)
+                    ->where('day', ($day-1))
+                    ->select('card')
+                    ->get()
+                    ->toArray();
+        
+        foreach ($all_cards as $key => $card) {
+            $whereIn[] = $card['card'];
+        }
+
+        //  получаем все приватные новости
+        $news = PrivateNews::where('day', $day)
+                ->where('type', 2)
+                ->whereIn('visible', $whereIn)
+                ->select('news_'.$lang, 'type', 'description_'.$lang)
+                ->get()
+                ->toJson();
+
+        return $news;    
+    }
+    
     public function login_screen($id = null){ return view('welcome', ['id' => $id]); }
     public function game_screen($lang, $key){ 
         // если ключ есть ок
@@ -69,4 +123,14 @@ class GameMechanicsController extends Controller{
             return 0;
         }        
     }
+    
+    // получение публичных новостей
+    // private function getNewsByDay($day){
+    //     return PublicNews::where('day', $day)->select('news', 'type', 'description')->first()->toJson();
+    // }
+
+    // private function getPrivateNewsByDay($day){
+    //     return PrivateNews::where('day', $day)->get()->toJson();
+    // }
+    
 }
