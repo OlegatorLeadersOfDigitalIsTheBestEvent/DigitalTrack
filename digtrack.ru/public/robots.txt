@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+Disallow: /queen-cabinet/
+Disallow: /public/queen-cabinet
