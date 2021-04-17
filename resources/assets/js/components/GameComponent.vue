@@ -30,11 +30,196 @@
                 </div>
             </div>
         </div>
+        
+        <div v-if="user.day >= 1 && user.day <= 5">
+            <!-- Widget Switcher -->
+            <div class="swith-toogler rounded text-center">
+                <div class="p-2 active-ui-el"  v-bind:class="{ 'active-screen-class rounded' : (screen == 1) }" v-on:click="screen = 1"><i class="fas fa-industry" aria-hidden="true"></i></div>
+                <div class="p-2 active-ui-el"  v-bind:class="{ 'active-screen-class rounded' : (screen == 2) }" v-on:click="screen = 2"><i class="fas fa-layer-group" aria-hidden="true"></i></div>
+                <div class="p-2 active-ui-el"  v-bind:class="{ 'active-screen-class rounded' : (screen == 3) }" v-on:click="screen = 3"><i class="far fa-newspaper" aria-hidden="true"></i></div>
+            </div>
+
+            <div class="battle-map" style="height: 88vh;">
+                <!-- Widget header -->
+                <header>
+                    <nav class="navbar navbar-expand-md navbar-dark fixed-top m-0 p-0" style="height: 57px; background: #fff; position: initial;">
+                        <div class="day-card">
+                            <div class="text-muted day-card-score font-weight-bold" id="ui-stage">День {{ user.day }}</div>
+                        </div>
+                        <span class="timer ml-4" id="ui-timer">{{ Math.floor(timer.time / 60).toString().padStart(2, '0') }}:{{ Math.floor(timer.time % 60).toString().padStart(2, '0') }}</span>
+                        
+                        <div class="ml-4 header-score-big-money" id="ui-timer-resource">{{ money_formatter_big(user.day_money) }}</div>
+                        <div class="ml-4 header-score-time"  id="ui-timer-resource">{{ user.day_time }}</div>
+                        
+                        <img class="navbar-nav ml-auto mr-4" style="height: 80%; " src="https://localhost/ui/logo.svg" alt="">
+                    </nav>
+                </header>
+            
+            
+                <!-- Begin page content -->
+                <div class="mt-3">
+                    <div v-show="screen == 1" class="row">
+                        <div class="col-md"></div>
+                        <div class="col-md-8 map" style="background: url(https://localhost/schemes/scheme.png) no-repeat"></div>
+                        <div class="col-md-3">
+                            <div class="row">
+                                <div v-for="(obj, index) in history_render_images_list" v-bind:class="{ 'offset-md-2' : (index % 2 == 0),  'offset-md' : (index % 2 != 0), 'class-parent-card' : (index != 0 && index != 1)}" class="col-md-4 mt-2">
+                                    <img 
+                                        style="width: 100%;" 
+                                        :src="obj.src" 
+                                        v-on:click="
+                                            clicked().then((res) => { 
+                                                if(res == 'click'){
+                                                    if(obj.id != undefined){
+                                                        openCardWindow(obj.id, getTimeById(obj.id), getMoneyById(obj.id), true, false)
+                                                    }                                    
+                                                } 
+                                            })                                
+                                        "
+                                        v-bind:class="{ 'card-map-c' : (obj.id != undefined)}"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+            
+                <div class="mt-3">
+                    <div class="container">
+                        <div v-show="screen == 2" class="row" style="max-height: calc(90vh - 140px);overflow-y: auto;">
+                            <div v-if="!cards.length" class="screen-size-with-vertical-align col-md-12">У вас еще нет доступных карт!</div>
+                            <div class="col-md-2" style="position: relative;padding-top: 20px;display: inline-block;" v-for="card in cards">
+                                <span class="badge badge-danger" v-if="new_cards_for_step.indexOf(card.id) != -1">NEW</span>
+                                <img class="active-ui-el" 
+                                    v-on:dblclick="
+                                        clicked().then((res) => { 
+                                            if(res == 'dbclick'){
+                                                if(card.active == true){ 
+                                                    chooseCard(card.id, card.day_time, card.money)
+                                                }else{
+                                                    openCardWindow(card.id, card.day_time, card.money, card.active, false)
+                                                }
+                                            } 
+                                        })
+                                    "    
+                                    v-on:click="
+                                        clicked().then((res) => { 
+                                            if(res == 'click'){
+                                                if(card.active == true){ 
+                                                    openCardWindow(card.id, card.day_time, card.money, card.active, true)
+                                                }else{
+                                                    openCardWindow(card.id, card.day_time, card.money, card.active, false)
+                                                }
+                                            } 
+                                        })
+                                    " 
+                                    style="width: 100%;" 
+                                    v-bind:class="{ 'uncative-ui' : card.active == false }" 
+                                    :src="smallCardById(card.id)" 
+                                    alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div v-show="screen == 3" class="container" style="min-height: 480px;">
+                    <div class="row">
+                        <div class="col-md-7 news-list">
+                            <table class="table">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th colspan="4">Сообщения в телеграмме</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+            
+                                    <tr v-if="!news.length">
+                                        <td colspan="4" class="text-center">Пока что нет публичных новостей</td>
+                                    </tr>
+                                    <!-- 
+
+                                        type
+
+                                        1 - публичные новости
+                                        2 - приватные новости
+                                        3 - информация о новых картах
+                                        4 - начало дня
+                                    -->
+                                    <tr v-for="item in news.slice().reverse()" v-bind:class="{ 'table-danger text-center' : (item.type == 4) }" >
+                                        <td v-bind:class="{ 'cell-color-public-news' : (item.type == 1) }" v-if="item['description_ru'] == null">
+                                            <span v-if="item.type == 1" class="text-primary">
+                                                <i class="fas fa-book-reader"></i>
+                                                <small>Новость из популярного телеграм канала</small><br>
+                                            </span>
+                                            <p class="mb-0" v-html="item['news_ru']"></p>
+                                        </td>
+                                        <td v-bind:class="{ 'cell-color-public-news' : (item.type == 1) }" v-if="item['description_ru'] != null">
+                                            <span v-if="item.type == 1">
+                                                <i class="fas fa-book-reader"></i>
+                                                <small class="text-primary">Новость из популярного телеграм канала</small><br>
+                                            </span>
+                                            <b>{{ item['news_ru'] }}</b>
+                                            <p class="mt-3 mb-0" v-html="item['description_ru']"></p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-5">
+                            <table class="table">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th colspan="3">Потери денег</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr>
+                                        <td class="text-center">
+                                            Сохранено
+                                        </td>
+                                        <td class="text-center">
+                                            Максимально
+                                        </td>
+                                        <td class="text-center">
+                                            Сохранил Сергей <img src="/ui/32.png" style="margin-top: -4px;">
+                                        </td>
+                                    </tr>
+                                    <tr v-for="(item, index) in dynamic">
+                                        <td v-if="index < user.day" class="text-center">
+                                            $ {{ money_formatter(item.save_result) }}
+                                        </td>
+                                        <td v-if="index >= user.day">
+                                            <div class="text-placeholder animated-background">{{ money_formatter(index) }}</div>
+                                        </td>
+
+                                        <td v-if="index < user.day"  class="text-center">
+                                            $ {{ money_formatter(item.best_result) }}
+                                        </td>
+                                        <td v-if="index >= user.day">
+                                            <div class="text-placeholder animated-background">{{ money_formatter(index) }}</div>
+                                        </td>
+
+                                        <td v-if="index < user.day"  class="text-center">
+                                            $ {{ money_formatter(item.best_result) }}
+                                        </td>
+                                        <td v-if="index >= user.day">
+                                            <div class="text-placeholder animated-background">{{ money_formatter(index) }}</div>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         <footer class="navbar-fixed-bottom row-fluid" style="height: 12vh;">
             <div class="row">
                 <div class="col-md-2">
                     <div class="money-card">
-                        <div class="text-muted money-card-score" id="ui-money">$ 200 000</div>
+                        <div class="text-muted money-card-score" id="ui-money">$ {{ money_formatter(user.score) }}</div>
                     </div>
                 </div>
                 <div class="col-md-8">   
@@ -69,7 +254,6 @@ export default {
                 // флаг для кнопки сигнализирубщий что идет игровой день и можно отправить ход
                 step_activity: false,
             },
-            lang: ru,
             dynamic:{
                 1:{
                     save_result: 0,
@@ -152,7 +336,6 @@ export default {
             axios.post('https://localhost/newcards', {
                 team_id: this.user.team_id,
                 day: this.user.day,
-                lang: this.lang,
             })
             .then((response) => {
                 // только новые карты
@@ -183,8 +366,8 @@ export default {
                 // добавляем новость о новых картах
                 this.news.push({
                     type: 3,
-                    ['news_' + this.lang]: this.ui_lang[this.lang].newCardsNotyfy + ": " + new_cards.join(', '),
-                    ['description_' + this.lang]: null,
+                    ['news_ru']: "Новые карты: " + new_cards.join(', '),
+                    ['description_ru']: null,
                 });
                
             });
@@ -293,7 +476,6 @@ export default {
         getDynamic(){
             axios.post('https://localhost/dynamic', {
                 key: this.user.team_id,
-                lang: this.lang,
             })
             .then((response) => {
                
@@ -320,7 +502,6 @@ export default {
             axios.post('https://localhost/public_news_publication', {
                 team_id: this.user.team_id,
                 day: this.user.day,
-                lang: this.lang,
             })
             .then((response) => {
                     response.data.forEach(item => {
@@ -335,7 +516,6 @@ export default {
             axios.post('https://localhost/private_news_publication', {
                 team_id: this.user.team_id,
                 day: this.user.day,
-                 lang: this.lang,
             })
             .then((response) => {
                

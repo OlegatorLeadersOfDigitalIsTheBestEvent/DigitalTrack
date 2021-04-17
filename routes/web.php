@@ -22,6 +22,7 @@ Route::post('dynamic', 'GameMechanicsController@dynamic');
 Route::post('step/choose', 'GameMechanicsController@step');
 Route::post('day_result', 'GameMechanicsController@day_result');
 Route::post('newcards', 'GameMechanicsController@newcards');
+Route::get('/certificate/{key}',   'GameMechanicsController@get_certtificate');
 
 Route::get('/game/{lang}/{key}', 'GameMechanicsController@game_screen')->name('check');
 Route::get('/rules/{lang}/{key}', 'GameMechanicsController@game_rules');

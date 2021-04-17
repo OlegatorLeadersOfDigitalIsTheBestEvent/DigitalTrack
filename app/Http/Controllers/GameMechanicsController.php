@@ -333,4 +333,49 @@ class GameMechanicsController extends Controller{
         Teams::where('key', $key)->update(['ingame' => false, 'used' => true, 'used_time' => \Carbon\Carbon::now()]);
         return view('result', ['key' => $key, 'lang' => $lang]);
     }
+    
+    public function get_certtificate($key){
+ 
+
+        $gamer_info = Teams::where('key', $key)->first();
+        $g_name = $gamer_info->name.' '.$gamer_info->surname;
+        
+        $im = new \Imagick('../resources/assets/pdf/cert.png');
+        $draw = new \ImagickDraw();
+
+        $draw->setFont('../resources/assets/ttf/GothaProBol.ttf');
+        $draw->setFontSize(110);
+        $draw->setStrokeWidth(1);
+        $draw->setTextAlignment(\Imagick::ALIGN_CENTER);
+        $draw->annotation(1240.5, 1700, $g_name);
+
+        $draw->setFont('../resources/assets/ttf/GothaProReg.ttf');
+        $draw->setFontSize(65);
+        $draw->setStrokeWidth(1);
+        $draw->setTextAlignment(\Imagick::ALIGN_CENTER);
+        $draw->annotation(1240.5, 1885, $key);
+
+
+        $draw->setFont('../resources/assets/ttf/GothaProBol.ttf');
+        $draw->setFontSize(65);
+        $color = new \ImagickPixel('#ff7129');
+        $draw->setFillColor($color);
+        
+        $draw->setStrokeWidth(1);
+        $draw->setTextAlignment(\Imagick::ALIGN_CENTER);
+        
+        setlocale(LC_TIME, 'ru_RU.utf-8');
+         
+        $draw->annotation(1240.5, 2510, strftime("%d %b %Y г.", time()));
+
+        $im->drawImage($draw);
+        $im->writeImage('../resources/assets/pdf/'.$key.'.png');
+
+        $pdf = new Fpdi();
+        $pdf->AddPage();
+        $pdf->Image('../resources/assets/pdf/'.$key.'.png', 0,0,210,297);
+
+        // $pdf->setSourceFile('../resources/assets/pdf/'.$key.'.png');
+        $pdf->Output('DigitalTrack.pdf', 'D');
+    }
 }
