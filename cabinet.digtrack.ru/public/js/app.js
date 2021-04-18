@@ -45848,21 +45848,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("div", { staticClass: "mt-3" }, [
                         _c("div", { staticClass: "row" }, [
-                          _c("div", { staticClass: "col" }, [
-                            _c(
-                              "a",
-                              {
-                                staticClass:
-                                  "btn btn-pill btn-block btn-primary",
-                                attrs: {
-                                  href:
-                                    "https://cabinet.digtrack.ru/customer/" +
-                                    customer.id
-                                }
-                              },
-                              [_vm._v("Результаты ассесмента")]
-                            )
-                          ]),
+                          _vm._m(0, true),
                           _vm._v(" "),
                           _c("div", { staticClass: "col" }, [
                             _c(
@@ -45948,7 +45934,23 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col" }, [
+      _c(
+        "a",
+        {
+          staticClass: "btn btn-pill btn-block btn-primary",
+          attrs: { href: "https://cabinet.digtrack.ru/info.pdf" }
+        },
+        [_vm._v("Результаты ассесмента")]
+      )
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {

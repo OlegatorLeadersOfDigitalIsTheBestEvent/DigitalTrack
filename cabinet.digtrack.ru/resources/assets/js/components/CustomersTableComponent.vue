@@ -63,7 +63,7 @@
                                         <div class="mt-3">
                                             <div class="row">
                                                 <div class="col">
-                                                    <a :href="'https://cabinet.digtrack.ru/customer/' + customer.id" class="btn btn-pill btn-block btn-primary">Результаты ассесмента</a>
+                                                    <a href="https://cabinet.digtrack.ru/info.pdf" class="btn btn-pill btn-block btn-primary">Результаты ассесмента</a>
                                                 </div>
                                                 <div class="col">
                                                     <a :href="'https://cabinet.digtrack.ru/customer/' + customer.id" class="btn btn-pill btn-block btn-primary">Подробнее</a>
