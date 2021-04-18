@@ -48,7 +48,7 @@
                 
                 <!-- <a href="https://www.cyber-training.ru/ru/connect" class="btn btn-pill btn-theme float-right">ВОЙТИ В ИГРУ</a> -->
                 @auth
-                <a href="https://cabinet.digtrack.ru/home" class="item-style px-2">Сотрудники</a> <a href="#" class="item-style px-2">Статистика</a> <a href="https://cabinet.digtrack.ru/departments" class="item-style px-2">Департаменты (отделы)</a> <a href="https://cabinet.digtrack.ru/positions " class="item-style pl-2">Должности</a>
+                <a href="https://cabinet.digtrack.ru/home" class="item-style px-2">Сотрудники</a> <a href="https://cabinet.digtrack.ru/statistic" class="item-style px-2">Статистика</a> <a href="https://cabinet.digtrack.ru/departments" class="item-style px-2">Департаменты (отделы)</a> <a href="https://cabinet.digtrack.ru/positions " class="item-style pl-2">Должности</a>
                 <div class="float-right"><span style="
                     display: block;
                     font-weight: 800;

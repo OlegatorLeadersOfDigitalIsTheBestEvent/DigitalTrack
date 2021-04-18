@@ -20,7 +20,7 @@
                                     <input type="text" v-model="name" placeholder="Добавить департамент" class="form-control">
                                 </div>
                                 <div class="col">
-                                    <button type="submit" @click="newDepartment" class="btn btn-pill btn-block btn-theme">Добавить</button>
+                                    <button type="submit" @click="newDepartment" class="btn btn-pill btn-block btn-primary">Добавить</button>
                                 </div>
                             </div>
                         </div>

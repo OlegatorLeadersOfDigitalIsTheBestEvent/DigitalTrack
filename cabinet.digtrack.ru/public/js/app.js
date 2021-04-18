@@ -45201,10 +45201,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
@@ -45257,13 +45253,32 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("section", { staticClass: "section-gap pt-5" }, [
     _c("div", { staticClass: "container" }, [
-      _vm.selected.length > 0
-        ? _c("div", { staticClass: "row" }, [_vm._m(0)])
-        : _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-md-9" }),
-            _vm._v(" "),
-            _vm._m(1)
-          ]),
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col" }, [
+          _c(
+            "a",
+            {
+              staticClass: "ml-2 btn btn-pill btn-primary float-right",
+              attrs: {
+                disabled: _vm.selected.length > 0,
+                href: "https://cabinet.digtrack.ru/department/new"
+              }
+            },
+            [_vm._v("Новый департамент")]
+          ),
+          _vm._v(" "),
+          _vm.selected.length > 0
+            ? _c(
+                "button",
+                {
+                  staticClass: "btn btn-pill btn-primary float-right",
+                  attrs: { type: "submit" }
+                },
+                [_vm._v("Удалить")]
+              )
+            : _vm._e()
+        ])
+      ]),
       _vm._v(" "),
       _c("div", { staticClass: "table-responsive mt-2" }, [
         _c("table", { staticClass: "table table-bordered table-striped" }, [
@@ -45375,11 +45390,7 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("td", [
-                  _c("h6", [_vm._v(_vm._s(department.department_name))]),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "text-muted" }, [
-                    _vm._v(_vm._s(department.position_name))
-                  ])
+                  _c("span", [_vm._v(_vm._s(department.department_name))])
                 ])
               ])
             }),
@@ -45390,35 +45401,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-3" }, [
-      _c(
-        "button",
-        { staticClass: "btn btn-block btn-theme", attrs: { type: "submit" } },
-        [_vm._v("Удалить")]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-3" }, [
-      _c(
-        "a",
-        {
-          staticClass: "btn btn-block btn-pill btn-theme",
-          attrs: { href: "https://cabinet.digtrack.ru/department/new" }
-        },
-        [_vm._v("Новый департамент")]
-      )
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -45577,6 +45560,47 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
@@ -45629,15 +45653,261 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("section", { staticClass: "section-gap pt-5" }, [
     _c("div", { staticClass: "container" }, [
-      _vm.selected.length > 0
-        ? _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-md-3" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-md-3" }, [
-              _c(
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-md-9" }, [
+          _c(
+            "div",
+            { staticClass: "row" },
+            _vm._l(_vm.customers, function(customer) {
+              return _c("div", { staticClass: "col-md-12 mb-3" }, [
+                _c("div", { staticClass: "card" }, [
+                  _c("div", { staticClass: "row" }, [
+                    _c(
+                      "div",
+                      { staticClass: "col-md-3 p-2" },
+                      [
+                        _c("center", { staticClass: "p-4" }, [
+                          _c("img", {
+                            staticClass: "rounded-circle",
+                            attrs: {
+                              src:
+                                "https://cabinet.digtrack.ru/avatars/" +
+                                customer.id +
+                                ".png"
+                            }
+                          })
+                        ])
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-8 p-4" }, [
+                      _c(
+                        "span",
+                        {
+                          staticClass:
+                            "badge badge-pill badge-primary float-right"
+                        },
+                        [_vm._v("Высокий уровень киберграмотности")]
+                      ),
+                      _vm._v(" "),
+                      _c("h6", { staticClass: "d-block" }, [
+                        _vm._v(
+                          _vm._s(customer.first_name) +
+                            " " +
+                            _vm._s(customer.second_name) +
+                            " " +
+                            _vm._s(customer.last_name)
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("b", { staticClass: "d-block" }, [
+                        _vm._v(_vm._s(customer.position_name))
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "mt-3" }, [
+                        _c("div", { staticClass: "col p-0 mb-2" }, [
+                          _c("label", [_vm._v("Поиск информации")]),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass: "progress",
+                              staticStyle: { height: "3px" }
+                            },
+                            [
+                              _c("div", {
+                                staticClass: "progress-bar",
+                                style: {
+                                  width: (customer.id + customer.id) * 9 + "%"
+                                },
+                                attrs: {
+                                  role: "progressbar",
+                                  "aria-valuenow": "25",
+                                  "aria-valuemin": "0",
+                                  "aria-valuemax": "100"
+                                }
+                              })
+                            ]
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col p-0 mb-2" }, [
+                          _c("label", [_vm._v("Разработка")]),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass: "progress",
+                              staticStyle: { height: "3px" }
+                            },
+                            [
+                              _c("div", {
+                                staticClass: "progress-bar",
+                                style: {
+                                  width:
+                                    (customer.id + customer.id * customer.id) *
+                                      15 +
+                                    "%"
+                                },
+                                attrs: {
+                                  role: "progressbar",
+                                  "aria-valuenow": "25",
+                                  "aria-valuemin": "0",
+                                  "aria-valuemax": "100"
+                                }
+                              })
+                            ]
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col p-0 mb-2" }, [
+                          _c("label", [_vm._v("Информационная безопасность")]),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass: "progress",
+                              staticStyle: { height: "3px" }
+                            },
+                            [
+                              _c("div", {
+                                staticClass: "progress-bar",
+                                style: {
+                                  width: (customer.id + customer.id) * 3 + "%"
+                                },
+                                attrs: {
+                                  role: "progressbar",
+                                  "aria-valuenow": "25",
+                                  "aria-valuemin": "0",
+                                  "aria-valuemax": "100"
+                                }
+                              })
+                            ]
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "mt-3" }, [
+                        _c("div", { staticClass: "row" }, [
+                          _c("div", { staticClass: "col" }, [
+                            _c("div", { staticClass: "form-check" }, [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.selected,
+                                    expression: "selected"
+                                  }
+                                ],
+                                staticClass: "form-check-input",
+                                attrs: { type: "checkbox", id: "gridCheck" },
+                                domProps: {
+                                  value: customer.id,
+                                  checked: Array.isArray(_vm.selected)
+                                    ? _vm._i(_vm.selected, customer.id) > -1
+                                    : _vm.selected
+                                },
+                                on: {
+                                  change: function($event) {
+                                    var $$a = _vm.selected,
+                                      $$el = $event.target,
+                                      $$c = $$el.checked ? true : false
+                                    if (Array.isArray($$a)) {
+                                      var $$v = customer.id,
+                                        $$i = _vm._i($$a, $$v)
+                                      if ($$el.checked) {
+                                        $$i < 0 &&
+                                          (_vm.selected = $$a.concat([$$v]))
+                                      } else {
+                                        $$i > -1 &&
+                                          (_vm.selected = $$a
+                                            .slice(0, $$i)
+                                            .concat($$a.slice($$i + 1)))
+                                      }
+                                    } else {
+                                      _vm.selected = $$c
+                                    }
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "label",
+                                {
+                                  staticClass: "form-check-label",
+                                  attrs: { for: "exampleCheck1" }
+                                },
+                                [_vm._v("Выбрать сотрудника")]
+                              )
+                            ])
+                          ])
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "mt-3" }, [
+                        _c("div", { staticClass: "row" }, [
+                          _c("div", { staticClass: "col" }, [
+                            _c(
+                              "a",
+                              {
+                                staticClass:
+                                  "btn btn-pill btn-block btn-primary",
+                                attrs: {
+                                  href:
+                                    "https://cabinet.digtrack.ru/customer/" +
+                                    customer.id
+                                }
+                              },
+                              [_vm._v("Результаты ассесмента")]
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "col" }, [
+                            _c(
+                              "a",
+                              {
+                                staticClass:
+                                  "btn btn-pill btn-block btn-primary",
+                                attrs: {
+                                  href:
+                                    "https://cabinet.digtrack.ru/customer/" +
+                                    customer.id
+                                }
+                              },
+                              [_vm._v("Подробнее")]
+                            )
+                          ])
+                        ])
+                      ])
+                    ])
+                  ])
+                ])
+              ])
+            }),
+            0
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-3" }, [
+          _c(
+            "a",
+            {
+              staticClass: "btn btn-pill btn-block btn-primary",
+              attrs: {
+                disabled: _vm.selected.length > 0,
+                href: "https://cabinet.digtrack.ru/customer/new"
+              }
+            },
+            [_vm._v("Новый сотрудник")]
+          ),
+          _vm._v(" "),
+          _vm.selected.length > 0
+            ? _c(
                 "a",
                 {
-                  staticClass: "btn btn-block btn-theme",
+                  staticClass: "btn btn-pill btn-block btn-primary",
                   attrs: {
                     href:
                       "https://cabinet.digtrack.ru/teach/start/" +
@@ -45646,13 +45916,13 @@ var render = function() {
                 },
                 [_vm._v("Обучить")]
               )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-md-3" }, [
-              _c(
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.selected.length > 0
+            ? _c(
                 "a",
                 {
-                  staticClass: "btn btn-block btn-theme",
+                  staticClass: "btn btn-pill btn-block btn-primary",
                   attrs: {
                     href:
                       "https://cabinet.digtrack.ru/test/start/" +
@@ -45661,94 +45931,24 @@ var render = function() {
                 },
                 [_vm._v("Протестировать")]
               )
-            ]),
-            _vm._v(" "),
-            _vm._m(0)
-          ])
-        : _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-md-9" }, [
-              _c(
-                "div",
-                { staticClass: "row" },
-                _vm._l(_vm.customers, function(customer) {
-                  return _c("div", { staticClass: "col-md-6 mb-3" }, [
-                    _c("div", { staticClass: "card" }, [
-                      _c("div", { staticClass: "row" }, [
-                        _c(
-                          "div",
-                          { staticClass: "col-md-3 p-2" },
-                          [
-                            _c("center", [
-                              _c("div", {
-                                staticStyle: {
-                                  height: "60px",
-                                  width: "60px",
-                                  background: "#ccc",
-                                  "border-radius": "50%"
-                                }
-                              })
-                            ])
-                          ],
-                          1
-                        ),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "col-md-8" }, [
-                          _c("span", { staticClass: "d-block" }, [
-                            _vm._v(
-                              _vm._s(customer.first_name) +
-                                " " +
-                                _vm._s(customer.second_name) +
-                                " " +
-                                _vm._s(customer.last_name)
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("span", { staticClass: "d-block" }, [
-                            _vm._v(_vm._s(customer.position_name))
-                          ])
-                        ])
-                      ])
-                    ])
-                  ])
-                }),
-                0
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.selected.length > 0
+            ? _c(
+                "button",
+                {
+                  staticClass: "btn btn-pill btn-block btn-primary",
+                  attrs: { type: "submit" }
+                },
+                [_vm._v("Уволить")]
               )
-            ]),
-            _vm._v(" "),
-            _vm._m(1)
-          ])
+            : _vm._e()
+        ])
+      ])
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-3" }, [
-      _c(
-        "button",
-        { staticClass: "btn btn-block btn-theme", attrs: { type: "submit" } },
-        [_vm._v("Уволить")]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-3" }, [
-      _c(
-        "a",
-        {
-          staticClass: "btn btn-pill btn-block btn-theme",
-          attrs: { href: "https://cabinet.digtrack.ru/customer/new" }
-        },
-        [_vm._v("Новый сотрудник")]
-      )
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -46851,7 +47051,7 @@ var render = function() {
                   _c(
                     "button",
                     {
-                      staticClass: "btn btn-pill btn-block btn-theme",
+                      staticClass: "btn btn-pill btn-block btn-primary",
                       attrs: { type: "submit" },
                       on: { click: _vm.newDepartment }
                     },
@@ -47242,7 +47442,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", [
-                _c("span", [_vm._v("НФДЛ (13%):")]),
+                _c("span", [_vm._v("НДС (13%):")]),
                 _vm._v(" "),
                 _c("span", { staticClass: "float-right font-weight-bold" }, [
                   _vm._v(
@@ -47275,7 +47475,7 @@ var render = function() {
                   _c(
                     "button",
                     {
-                      staticClass: "btn btn-block btn-theme mt-3",
+                      staticClass: "btn btn-block btn-primary mt-3",
                       on: { click: _vm.startTeach }
                     },
                     [_vm._v("Обучить")]
@@ -47285,7 +47485,7 @@ var render = function() {
                   _c(
                     "button",
                     {
-                      staticClass: "btn btn-block btn-theme mt-3",
+                      staticClass: "btn btn-block btn-primary mt-3",
                       attrs: { disabled: "" }
                     },
                     [_vm._v("Обучить")]
@@ -47616,7 +47816,7 @@ var render = function() {
                   _c(
                     "button",
                     {
-                      staticClass: "btn btn-block btn-theme mt-3",
+                      staticClass: "btn btn-block btn-primary mt-3",
                       on: { click: _vm.startTeach }
                     },
                     [_vm._v("Протестировать")]
@@ -47626,7 +47826,7 @@ var render = function() {
                   _c(
                     "button",
                     {
-                      staticClass: "btn btn-block btn-theme mt-3",
+                      staticClass: "btn btn-block btn-primary mt-3",
                       attrs: { disabled: "" }
                     },
                     [_vm._v("Протестировать")]

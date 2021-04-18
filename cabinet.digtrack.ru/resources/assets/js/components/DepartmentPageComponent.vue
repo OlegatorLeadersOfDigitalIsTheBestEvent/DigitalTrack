@@ -2,15 +2,12 @@
     <section class="section-gap pt-5">
         <div class="container"> 
             
-            <div class="row" v-if="selected.length > 0">
-                <div class="col-md-3">
-                    <button type="submit" class="btn btn-block btn-theme">Удалить</button>
-                </div>
-            </div>
-            <div class="row" v-else>
-                <div class="col-md-9"></div>
-                <div class="col-md-3">
-                    <a href="https://cabinet.digtrack.ru/department/new" class="btn btn-block btn-pill btn-theme">Новый департамент</a>
+           
+            <div class="row">
+                <div class="col">
+                    <a :disabled="selected.length > 0" href="https://cabinet.digtrack.ru/department/new" class="ml-2 btn btn-pill btn-primary float-right">Новый департамент</a>
+                    <button v-if="selected.length > 0" type="submit" class="btn btn-pill btn-primary float-right">Удалить</button>
+
                 </div>
             </div>
             
@@ -40,8 +37,7 @@
                             </div>
                         </td>
                         <td> 
-                            <h6>{{ department.department_name }}</h6>
-                            <span class="text-muted">{{ department.position_name }}</span>
+                            <span>{{ department.department_name }}</span>
                         </td>
                     
                     </tr>

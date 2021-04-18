@@ -34,15 +34,15 @@
                         <h5 class="mb-4">Счет</h5>
                         <div class="border rounded p-3">
                             <div><span>Игра ({{ scripts[scriptId-1].name }}):</span> <span class="float-right font-weight-bold">₽ {{ list.length*scripts[scriptId-1].price*0.73 }}</span></div> 
-                            <div><span>НФДЛ (13%):</span> <span class="float-right font-weight-bold">₽ {{ list.length*scripts[scriptId-1].price*0.13 }}</span></div>
+                            <div><span>НДС (13%):</span> <span class="float-right font-weight-bold">₽ {{ list.length*scripts[scriptId-1].price*0.13 }}</span></div>
 
                             <div class="border-top mt-3 pt-2"><span>Всего:</span> <span class="float-right  font-weight-bold">₽ {{ list.length*scripts[scriptId-1].price }}</span></div>
                         </div>
                         <div v-if="list.length*scripts[scriptId-1].price <= score">
-                            <button @click="startTeach" class="btn btn-block btn-theme mt-3">Обучить</button>
+                            <button @click="startTeach" class="btn btn-block btn-primary mt-3">Обучить</button>
                         </div>
                         <div v-else>
-                            <button disabled class="btn btn-block btn-theme mt-3">Обучить</button>
+                            <button disabled class="btn btn-block btn-primary mt-3">Обучить</button>
                             <small>У вас не достаточно средств на обучение</small>
                         </div>
                     </div>

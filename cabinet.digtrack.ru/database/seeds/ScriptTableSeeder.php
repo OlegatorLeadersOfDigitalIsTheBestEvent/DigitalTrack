@@ -11,7 +11,16 @@ class ScriptTableSeeder extends Seeder
      */
     public function run()
     {
-        
+        //
+        DB::table('scripts')->insert([
+            'name' => 'Корпорация',
+            'price' => 1000,
+            
+        ]);
+        DB::table('scripts')->insert([
+            'name' => 'Персональная безопасность',
+            'price' => 1000,
+        ]);
         
     }
 }

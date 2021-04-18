@@ -41,10 +41,10 @@
                             <div class="border-top mt-3 pt-2"><span>Всего:</span> <span class="float-right  font-weight-bold">₽ {{ list.length*price }}</span></div>
                         </div>
                         <div v-if="list.length*scripts[scriptId-1].price <= score">
-                            <button @click="startTeach" class="btn btn-block btn-theme mt-3">Протестировать</button>
+                            <button @click="startTeach" class="btn btn-block btn-primary mt-3">Протестировать</button>
                         </div>
                         <div v-else>
-                            <button disabled class="btn btn-block btn-theme mt-3">Протестировать</button>
+                            <button disabled class="btn btn-block btn-primary mt-3">Протестировать</button>
                             <small>У вас не достаточно средств на обучение</small>
                         </div>
                     </div>
